@@ -1,0 +1,226 @@
+DROP SCHEMA IF EXISTS `MATRICULAS2` ;
+CREATE SCHEMA IF NOT EXISTS `MATRICULAS2`;
+USE `MATRICULAS2` ;
+ 
+select  *from alumnos;
+
+-- -----------------------------------------------------
+-- Table `ASIGNATURAS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ASIGNATURAS` ;
+
+CREATE TABLE IF NOT EXISTS `ASIGNATURAS` (
+  `id_asignatura` INT NOT NULL AUTO_INCREMENT,
+  `cod_asignatura` VARCHAR(45) NOT NULL,
+  `nombre_asignatura` VARCHAR(45) NOT NULL,
+  `nro_creditos` INT NOT NULL,
+  PRIMARY KEY (`id_asignatura`))
+ENGINE = InnoDB;
+
+select *from asignaturas;
+
+
+-- -----------------------------------------------------
+-- Table `ALUMNOS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ALUMNOS` ;
+
+CREATE TABLE IF NOT EXISTS `ALUMNOS` (
+  `id_alumno` INT NOT NULL AUTO_INCREMENT,
+  `cod_alumno` VARCHAR(45) NOT NULL,
+  `apellidos_alumno` VARCHAR(45) NOT NULL,
+  `nombres_alumno` VARCHAR(45) NOT NULL,
+  `celular_alumno` INT NOT NULL,
+  `email_alumno` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_alumno`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `MATRICULAS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `MATRICULAS` ;
+
+CREATE TABLE IF NOT EXISTS `MATRICULAS` (
+  `id_matricula` INT NOT NULL AUTO_INCREMENT,
+  `cod_matriclua` VARCHAR(45) NOT NULL,
+  `id_alumno` INT NOT NULL,
+  `id_asignatura` INT NOT NULL,
+  PRIMARY KEY (`id_matricula`, `id_alumno`, `id_asignatura`),
+  FOREIGN KEY (`id_alumno`)
+  REFERENCES `ALUMNOS` (`id_alumno`),
+  FOREIGN KEY (`id_asignatura`)
+  REFERENCES `ASIGNATURAS` (`id_asignatura`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `DOCENTES`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DOCENTES` ;
+
+CREATE TABLE IF NOT EXISTS `DOCENTES` (
+  `id_docente` INT NOT NULL AUTO_INCREMENT,
+  `cod_docente` VARCHAR(45) NOT NULL,
+  `apellidos_docente` VARCHAR(45) NOT NULL,
+  `nombres_docente` VARCHAR(45) NOT NULL,
+  `celular_docente` INT NOT NULL,
+  `email_docente` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_docente`))
+ENGINE = InnoDB;
+
+select *from docentes;
+
+-- -----------------------------------------------------
+-- Table `GRUPOS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `GRUPOS` ;
+
+CREATE TABLE IF NOT EXISTS `GRUPOS` (
+  `id_grupo` INT NOT NULL AUTO_INCREMENT,
+  `cod_grupo` VARCHAR(45) NOT NULL,
+  `id_docente` INT NOT NULL,
+  `id_asignatura` INT NOT NULL,
+  PRIMARY KEY (`id_grupo`, `id_docente`, `id_asignatura`),
+  FOREIGN KEY (`id_docente`)
+  REFERENCES `DOCENTES` (`id_docente`),
+  FOREIGN KEY (`id_asignatura`)
+  REFERENCES `ASIGNATURAS` (`id_asignatura`))
+ENGINE = InnoDB;
+
+select *from grupos;
+-- -----------------------------------------------------
+-- Table `AULAS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `AULAS` ;
+
+CREATE TABLE IF NOT EXISTS `AULAS` (
+  `id_aula` INT NOT NULL AUTO_INCREMENT,
+  `cod_aula` VARCHAR(45) NOT NULL,
+  `nombre_aula` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_aula`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `GRUPO_AULA`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `GRUPO_AULA` ;
+
+CREATE TABLE IF NOT EXISTS `GRUPO_AULA` (
+  `id_grupo_aula` INT NOT NULL AUTO_INCREMENT,
+  `dia` VARCHAR(45) NOT NULL,
+  `hora` VARCHAR(45) NOT NULL,
+  `descripcion` VARCHAR(45) NOT NULL,
+  `id_grupo` INT NOT NULL,
+  `id_aula` INT NOT NULL,
+  PRIMARY KEY (`id_grupo_aula`, `id_grupo`, `id_aula`),
+  FOREIGN KEY (`id_grupo`)
+  REFERENCES `GRUPOS` (`id_grupo`),
+  FOREIGN KEY (`id_aula`)
+  REFERENCES `AULAS` (`id_aula`))
+ENGINE = InnoDB;
+select *from grupo_aula;
+
+-- -----------------------------------------------------
+-- Table `HORAS`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `HORAS` ;
+
+CREATE TABLE IF NOT EXISTS `HORAS` (
+  `id_hora` INT NOT NULL AUTO_INCREMENT,
+  `hora` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_hora`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `LOGIN`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LOGIN` ;
+
+CREATE TABLE IF NOT EXISTS `LOGIN` (
+  `id_login` INT NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_login`))
+ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+
+insert into ASIGNATURAS(cod_asignatura, nombre_asignatura, nro_creditos) values ('s1', 'Prolog', 4),
+('s2', 'Topicos en Sisope', 4), ('s3', 'Top. Esp. en Procesamiento Grafico', 4),
+('s4', 'Lab. de Base', 2), ('s5', 'Compiladores', 4), ('s6', 'Redes de C.', 4),
+('s7', 'Algebra Universal para C.', 4);
+
+insert into ALUMNOS(cod_alumno,apellidos_alumno,nombres_alumno,celular_alumno,email_alumno) 
+values ('a1','Cruz','Richard',232321,'richard@gmail.com'), ('a2','Rosario','Alexander',1234,'alexandr@gmail.com'),
+('a3','Tandaypan','Henrry',114,'henrry@gmail.com'), ('a4','Cardenas','Adrian',3334,'adrian@gmail.com'),
+('a5','Alcantara','Leydi',3322,'leydi@gmail.com');
+
+insert into DOCENTES(cod_docente,apellidos_docente,nombres_docente,celular_docente,email_docente) 
+values ('d1','Diaz','José',26621,'jose@gmail.com'), ('d2','Bravo','David',8884,'david@gmail.com'),
+('d3','Pedro','Sofia',999,'sofia@gmail.com'), ('d4','Polo','Jaime',0000,'jaime@gmail.com'), ('d5','Rdriguez','José',4342,'jose@gmail.com');
+
+insert into GRUPOS(cod_grupo,id_docente,id_asignatura) values ('g1',1,1), ('g1',2,2), ('g1',3,3), ('g1',4,4),('g1',4,5),('g1',4,6),('g1',1,7);
+
+insert into AULAS(cod_aula, nombre_aula) values('u1','INFO 2'), ('u2','INFO 3'), ('u3','INFO 5'),('u4','LAB A'), ('u5','LAB B'), ('u6','LAB C');
+
+insert into GRUPO_AULA(dia, hora, descripcion, id_grupo, id_aula) values ('Lunes','07:00 - 09:00', 'Teoria', 1, 1), 
+('Lunes','09:00 - 11:00', 'Laboratorio', 1, 4),('Lunes','15:00 - 17:00', 'Practica', 1, 1), ('Lunes','11:00 - 13:00', 'Teoria', 2, 5),
+('Miercoles','15:00 - 17:00', 'Teoria', 3, 5), ('Lunes','19:00 - 21:00', 'Teoria', 4, 1),
+('Martes','15:00 - 17:00','Laboratorio', 5, 4), ('Jueves','09:00 - 11:00', 'Teoria', 6, 3), 
+('Viernes','11:00 - 13:00','Teoria', 7, 6);
+
+insert into HORAS(hora) VALUES ('07:00 - 09:00'), ('09:00 - 11:00'), ('11:00 - 13:00'), ('13:00 - 15:00'), ('15:00 - 17:00'), ('17:00 - 19:00'),
+('19:00 - 21:00');
+
+insert into MATRICULAS(cod_matriclua,id_alumno,id_asignatura) values ('m1',1,1), ('m2',1,2), ('m3',1,3), ('m4',1,4),
+('m5',1,5), ('m6',1,6), ('m7',1,7), ('m8',2,1), ('m9',2,2), ('m10',2,3), ('m11',2,4), ('m12',2,5), ('m13',3,1), ('m14',3,2),
+('m15',3,3), ('m16',3,4), ('m17',3,5), ('m18',3,6), ('m19',3,7);
+
+-- ---------------------------------------------------------------------------------------------------------------------
+select *from login;
+select  ASIGNATURAS.id_asignatura, nombre_asignatura, AULAS.id_aula, nombre_aula, dia, hora from MATRICULAS
+	inner join ALUMNOS on MATRICULAS.id_alumno = ALUMNOS.id_alumno
+	inner join ASIGNATURAS on MATRICULAS.id_asignatura = ASIGNATURAS.id_asignatura
+    inner join GRUPOS on GRUPOS.id_asignatura = ASIGNATURAS.id_asignatura
+    inner join GRUPO_AULA on GRUPO_AULA.id_grupo = GRUPOS.id_grupo
+	inner join AULAS on GRUPO_AULA.id_aula = AULAS.id_aula
+	where  hora = '07:00 - 09:00' and dia = 'Lunes' and nombres_alumno = 'Richard';
+select *from horas;
+
+select grupos.id_grupo, docentes.nombres_docente,asignaturas.nombre_asignatura from grupos,docentes,asignaturas where 
+asignaturas.id_asignatura=grupos.id_asignatura and
+grupos.id_docente=docentes.id_docente;
+
+select grupos.id_grupo, docentes.nombres_docente,asignaturas.nombre_asignatura from grupos,docentes,asignaturas where 
+asignaturas.id_asignatura=grupos.id_asignatura and
+grupos.id_docente=docentes.id_docente and
+grupos.id_grupo=2;
+
+insert into grupo_aula(dia,hora,descripcion,id_grupo,id_aula) values('viernes','07:00','Teoria',1,3);
+update asignaturas set cod_asignatura='s111',nombre_asignatura='ing. software',nro_creditos='5' where id_asignatura=9;
+
+select *from login;
+ 
+select *from horas;
+
+	select    nombres_docente, nombre_aula ,nombre_asignatura from GRUPOS
+    inner join ASIGNATURAS on GRUPOS.id_asignatura =ASIGNATURAS.id_asignatura
+    inner join DOCENTES on GRUPOS.id_docente =DOCENTES.id_docente
+	inner join GRUPO_AULA on GRUPOS.id_grupo = GRUPO_AULA.id_grupo
+    inner join AULAS on GRUPO_AULA.id_aula = AULAS.id_aula
+    where    hora = '07:00 - 09:00' and dia = 'Lunes' and nombres_docente = 'josé';
+    
+select *from asignaturas WHERE id_asignatura =1;
+select *from grupos;
+select *from aulas;
+select *from grupo_aula;
+select *from asignaturas;
+select *from docentes;
+select *from horas;
+select *from matriculas;
+select *from alumnos;
